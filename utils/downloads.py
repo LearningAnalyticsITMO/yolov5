@@ -26,9 +26,9 @@ def safe_download(file, url, url2=None, min_bytes=1E0, error_msg=''):
     file = Path(file)
     assert_msg = f"Downloaded file '{file}' does not exist or size is < min_bytes={min_bytes}"
     try:  # url1
-        print(f'Downloading {url} to {file}...')
+        print(f'Downloading {url} to {os.getenv("XDG_CACHE_HOME", "models/") + str(file)}...')
         torch.hub.download_url_to_file(url, os.getenv("XDG_CACHE_HOME", "models/") + str(file))
-        #assert file.exists() and file.stat().st_size > min_bytes, assert_msg  # check
+        assert Path(os.getenv("XDG_CACHE_HOME", "models/") + str(file)).exists() and Path(os.getenv("XDG_CACHE_HOME", "models/") + str(file)).stat().st_size > min_bytes, assert_msg  # check
     except Exception as e:  # url2
         file.unlink(missing_ok=True)  # remove partial downloads
         print(f'ERROR: {e}\nRe-attempting {url2 or url} to {file}...')
