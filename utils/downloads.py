@@ -23,12 +23,13 @@ def gsutil_getsize(url=''):
 
 def safe_download(file, url, url2=None, min_bytes=1E0, error_msg=''):
     # Attempts to download file from url or url2, checks and removes incomplete downloads < min_bytes
+    file = os.getenv("TORCH_HOME") + "/" + str(file)
     file = Path(file)
     assert_msg = f"Downloaded file '{file}' does not exist or size is < min_bytes={min_bytes}"
     try:  # url1
-        print(f'Downloading {url} to {os.getenv("XDG_CACHE_HOME", "models/") + str(file)}...')
-        torch.hub.download_url_to_file(url, os.getenv("XDG_CACHE_HOME", "models/") + str(file))
-        #assert Path(os.getenv("XDG_CACHE_HOME", "models/") + str(file)).exists() and Path(os.getenv("XDG_CACHE_HOME", "models/") + str(file)).stat().st_size > min_bytes, assert_msg  # check
+        print(f'Downloading {url} to {file}...')
+        torch.hub.download_url_to_file(url, str(file))
+        assert file.exists() and file.stat().st_size > min_bytes, assert_msg  # check
     except Exception as e:  # url2
         file.unlink(missing_ok=True)  # remove partial downloads
         print(f'ERROR: {e}\nRe-attempting {url2 or url} to {file}...')
