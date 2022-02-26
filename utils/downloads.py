@@ -78,7 +78,7 @@ def attempt_download(file, repo='ultralytics/yolov5'):  # from utils.downloads i
                           min_bytes=1E5,
                           error_msg=f'{file} missing, try downloading from https://github.com/{repo}/releases/')
 
-    return os.getenv("TORCH_HOME") + "/" + str(file)
+    return str(file)
 
 
 def gdrive_download(id='16TiPfZj7htmTyhntwcZyEEAejOUxuT6m', file='tmp.zip'):
