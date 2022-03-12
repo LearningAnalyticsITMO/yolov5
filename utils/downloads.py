@@ -44,7 +44,11 @@ def safe_download(file, url, url2=None, min_bytes=1E0, error_msg=''):
 def attempt_download(file, repo='ultralytics/yolov5'):  # from utils.downloads import *; attempt_download()
     # Attempt file download if does not exist
     
-    temp = os.getenv("TORCH_HOME") + "/" + str(file)
+    if os.getenv("TORCH_HOME") in file:
+        temp = str(file)
+    else:
+        temp = os.getenv("TORCH_HOME") + "/" + str(file)
+        
     file = Path(temp.strip().replace("'", ''))
 
     if not file.exists():
